@@ -1,8 +1,14 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { FlatList, Text, View } from 'react-native';
+import { usePokemonPaginated } from '../hooks/usePokemonPaginated';
 
 export const PokemonScreen = () => {
+
+ const {isLoading, simplePokemonList } = usePokemonPaginated();
+
   return <View>
-      <Text>Pokemon Screen</Text>
+     
+  
+
   </View>;
 };
