@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -11,6 +11,7 @@ import {SimplePokemon} from '../interfaces/pokemonInterfaces';
 import {globalStyles} from '../theme/appTheme';
 import {FadeInImage} from './fadeInImage';
 import ImageColors from 'react-native-image-colors'
+import { useNavigation } from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -23,11 +24,25 @@ export const PokemonCard = ({pokemon}: Props) => {
 const [bgColor, setBgColor] = useState('grey');
 
 
+/* Como la card esta dentro de una flatlist y en una de esas cuando hago scroll no le doy tiempo a cargar el fondo
+me podria dar un error de React que el componente no esta montado (el flatlist desmonta componentes cuando los subimos)
+por eso me voy a fijar si el componente esta montado (si se construye esta montado) para determinar si le pongo o no el color o sea
+le cambio el estado o no, como es un useRef no va a re renderizar nada cuando cambie
+*/
+const isMounted = useRef(true);
+
+const navigation = useNavigation();
+
  useEffect(() => {
    
 
     ImageColors.getColors(pokemon.picture, {fallback: 'grey'}).then(
     colors =>{
+
+        /* me fijo si esta desmontado para n hacer nada */
+        if (!isMounted.current){
+            return;
+        }
 
             if (colors.platform ==='android'){
 
@@ -40,14 +55,20 @@ const [bgColor, setBgColor] = useState('grey');
             }
         }
     );
-  
+   return ()=>{
+       /* cuando se desmonte el componente lo cambio */
+       isMounted.current=false;
+   }
  
  }, []);
  
 
   return (
     <View>
-      <TouchableOpacity>
+      <TouchableOpacity
+      onPress={()=> navigation.navigate('PokemonScreen', {simplePokemon: pokemon, color: bgColor})}
+      
+      >
         <View
           style={{
             ...styles.cardContainer,

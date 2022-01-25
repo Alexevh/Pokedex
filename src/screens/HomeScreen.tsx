@@ -21,7 +21,7 @@ export const HomeScreen = () => {
       />
 
 <View style={{
-    ...globalStyles.globalMargin,
+   
     alignItems: 'center'
 }}>
 <FlatList
