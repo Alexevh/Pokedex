@@ -4,6 +4,7 @@ import {ActivityIndicator, FlatList, Image, StyleSheet, Text, TouchableOpacity, 
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { FadeInImage } from '../components/fadeInImage';
+import { PokemonDetails } from '../components/pokemonDetails';
 import { usePokemon } from '../hooks/usePokemon';
 import {usePokemonPaginated} from '../hooks/usePokemonPaginated';
 import {RootStackParams} from '../navigator/Navigator';
@@ -64,14 +65,17 @@ export const PokemonScreen = ({navigation, route}: Props) => {
       </View>
 
            {/** detalles y loader */}
-           <View style={{
-             ...styles.loadingIndicator
-           }}>
-             <ActivityIndicator
-             color={color} 
-             size={50
-             }/>
-           </View>
+           {
+             isLoading ? (<View style={{
+              ...styles.loadingIndicator
+            }}>
+              <ActivityIndicator
+              color={color} 
+              size={50
+              }/>
+            </View>) : <PokemonDetails pokemon={pokemon} />
+           }
+           
 
 
     </View>
